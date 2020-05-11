@@ -12,7 +12,7 @@ https://www.arduino.cc/en/ArduinoModbus/ArduinoModbus
 == Differences from original ArduinoModbus ==
 This library is RTU only implementation of Modbus with a tweak to transmission initiation functions to make sure that proper delays, based on current port speed, are applied between the moment, when DE/~RE pin of RS485-to-UART module is set to DE=HIGH/~RE=HIGH (write mode), and the moment, when actual write to UART Serial port takes place.
 
-When initiating transmission, the original ArduinoModbus library (which is designed for a specific Arduino shield) applies hardcoded 50us delay regardless of port speed, which resulted in garbled communication over RS485 in a setup with generic RS485-to-UART module based on MAX485 chip.
+When initiating transmission, the original ArduinoModbus library (which is designed for a specific Arduino shield) applies hardcoded 50us delay regardless of port speed, which resulted in garbled communication over RS485 in a setup with generic RS485-to-UART module based on MAX485 chip. This is "mysteriously" in line with the strict Modbus standard requirement to maintain at least 3.5 delay between frames (with an exception of fixed delay of 1750us for port speeds of 19200 and higher). 
 
 Based on extended study it was discovered, that a delay equivalent of time interval required to transmit 3-3.5 chars at the current port speed is enough avoid transmission errors in majority of tests.
 
