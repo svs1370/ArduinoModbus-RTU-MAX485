@@ -12,6 +12,10 @@ https://www.arduino.cc/en/ArduinoModbus/ArduinoModbus
 == Differences from original ArduinoModbus ==
 This library is RTU only implementation of Modbus with a tweak to transmission initiation functions to make sure that proper delays, based on port speed, are applied between the moment, when DE/~RE pin of RS485-TTL UART module is set to DE=1 mode, and the moment, when actual write to UART Serial port takes place.
 
+When initiating transmission, the original ArduinoModbus library applies 50us delay regardless of port speed, which resulted in garbled communication over RS485 in a setup with generic RS485-to-UART module based on MAX485 chip.
+
+Based on extended study it was discovered, that a delay equivalent of time interval required to transmit 3-3.5 chars at the current port speed is enough avoid transmission errors in majority of tests.
+
 Tested with Arduino Uno slave, MAX485 based RS485-to-UART adapter and a Modbus master device running original libmodbus library.
 
 == Useful resources ==
