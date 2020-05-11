@@ -9,6 +9,11 @@ This library is based on https://github.com/stephane/libmodbus[libmodbus], modif
 For more information about this library please visit us at
 https://www.arduino.cc/en/ArduinoModbus/ArduinoModbus
 
+== Differences from original ArduinoModbus ==
+This library is RTU only implementation of Modbus with a tweak to transmission initiation functions to make sure that proper delays, based on port speed, are applied between the moment, when DE/~RE pin of RS485-TTL UART module is set to DE=1 mode, and the moment, when actual write to UART Serial port takes place.
+
+Tested with Arduino Uno slave, MAX485 based RS485-to-UART adapter and a Modbus master device running original libmodbus library.
+
 == Useful resources ==
 
 * https://en.wikipedia.org/wiki/Modbus[Modbus - Wikipedia]
