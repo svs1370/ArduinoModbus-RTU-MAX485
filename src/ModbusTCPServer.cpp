@@ -59,10 +59,12 @@ void ModbusTCPServer::accept(Client& client)
 
 int ModbusTCPServer::poll()
 {
+  int requestLength = 0;
+
   if (_client != NULL) {
     uint8_t request[MODBUS_TCP_MAX_ADU_LENGTH];
 
-    int requestLength = modbus_receive(_mb, request);
+    requestLength = modbus_receive(_mb, request);
 
     if (requestLength > 0) {
       modbus_reply(_mb, request, requestLength, &_mbMapping);
