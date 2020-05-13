@@ -57,7 +57,7 @@ void ModbusTCPServer::accept(Client& client)
   }
 }
 
-void ModbusTCPServer::poll()
+int ModbusTCPServer::poll()
 {
   if (_client != NULL) {
     uint8_t request[MODBUS_TCP_MAX_ADU_LENGTH];
@@ -68,4 +68,6 @@ void ModbusTCPServer::poll()
       modbus_reply(_mb, request, requestLength, &_mbMapping);
     }
   }
+
+  return requestLength;
 }
