@@ -47,7 +47,7 @@ int ModbusRTUServerClass::begin(int id, unsigned long baudrate, uint16_t config)
   return 1;
 }
 
-void ModbusRTUServerClass::poll()
+int ModbusRTUServerClass::poll()
 {
   uint8_t request[MODBUS_RTU_MAX_ADU_LENGTH];
 
@@ -56,6 +56,8 @@ void ModbusRTUServerClass::poll()
   if (requestLength > 0) {
     modbus_reply(_mb, request, requestLength, &_mbMapping);
   }
+
+  return requestLength;
 }
 
 ModbusRTUServerClass ModbusRTUServer;
