@@ -16,7 +16,7 @@
 #include <assert.h>
 
 #ifdef ARDUINO
-#include <ArduinoRS485.h>
+#include <ArduinoRS485_MAX485.h>
 
 #ifndef DEBUG
 #define printf(...) {}
@@ -327,11 +327,11 @@ static ssize_t _modbus_rtu_send(modbus_t *ctx, const uint8_t *req, int req_lengt
 
     ssize_t size;
 
-    RS485.noReceive();
-    RS485.beginTransmission();
-    size = RS485.write(req, req_length);
-    RS485.endTransmission();
-    RS485.receive();
+    RS485_MAX485.noReceive();
+    RS485_MAX485.beginTransmission();
+    size = RS485_MAX485.write(req, req_length);
+    RS485_MAX485.endTransmission();
+    RS485_MAX485.receive();
 
     return size;
 #else
@@ -396,7 +396,7 @@ static ssize_t _modbus_rtu_recv(modbus_t *ctx, uint8_t *rsp, int rsp_length)
 #elif defined(ARDUINO)
     (void)ctx;
 
-    return RS485.readBytes(rsp, rsp_length);
+    return RS485_MAX485.readBytes(rsp, rsp_length);
 #else
     return read(ctx->s, rsp, rsp_length);
 #endif
@@ -654,8 +654,8 @@ static int _modbus_rtu_connect(modbus_t *ctx)
         return -1;
     }
 #elif defined(ARDUINO)
-    RS485.begin(ctx_rtu->baud, ctx_rtu->config);
-    RS485.receive();
+    RS485_MAX485.begin(ctx_rtu->baud, ctx_rtu->config);
+    RS485_MAX485.receive();
 #else
     /* The O_NOCTTY flag tells UNIX that this program doesn't want
        to be the "controlling terminal" for that port. If you
@@ -1210,8 +1210,8 @@ static void _modbus_rtu_close(modbus_t *ctx)
 #elif defined(ARDUINO)
     (void)ctx_rtu;
 
-    RS485.noReceive();
-    RS485.end();
+    RS485_MAX485.noReceive();
+    RS485_MAX485.end();
 #else
     if (ctx->s != -1) {
         tcsetattr(ctx->s, TCSANOW, &ctx_rtu->old_tios);
@@ -1230,8 +1230,8 @@ static int _modbus_rtu_flush(modbus_t *ctx)
 #elif defined(ARDUINO)
     (void)ctx;
 
-    while (RS485.available()) {
-        RS485.read();
+    while (RS485_MAX485.available()) {
+        RS485_MAX485.read();
     }
 
     return 0;
@@ -1263,7 +1263,7 @@ static int _modbus_rtu_select(modbus_t *ctx, fd_set *rset,
     unsigned long start = millis();
 
     do {
-        s_rc = RS485.available();
+        s_rc = RS485_MAX485.available();
 
         if (s_rc >= length_to_read) {
             break;
